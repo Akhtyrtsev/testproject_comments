@@ -5,6 +5,5 @@ from . import views
 app_name = 'comments'
 
 urlpatterns = [
-    path('', views.ShowComment.as_view()),
-    path('create/', views.AddComment.as_view()),
+    path('', views.AddComment.as_view()),
 ]

@@ -7,22 +7,24 @@ from .forms import CommentForm
 from .models import Comment
 from django.views import View
 
+from user_agents import parse
+
 class AddComment(View):
     def post(self, request):
         if request.method == 'POST':
-            self.comment = Comment()
-            self.comment.user_name = request.POST.get('user_name')
-            self.comment.user_email = request.POST.get('user_email')
-            self.comment.home_page = request.POST.get('home_page')
-            self.comment.text = request.POST.get('text')
-            self.comment.parent_id = 1
-            self.comment.browser = 'browser'
-            self.comment.user_ip = '192.168.0.1'
-            self.comment.save()
-            return HttpResponseRedirect('http://127.0.0.1:8000/comments/')
-
-class ShowComment(View):
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.parent_id = 1
+                ua_string = request.META['HTTP_USER_AGENT']
+                user_agent = parse(ua_string)
+                comment.user_browser = user_agent.browser.family + ' ' + user_agent.browser.version_string
+                comment.user_ip = request.META['REMOTE_ADDR']
+                comment.save()
+            return HttpResponseRedirect('/comments/')
     def get(self, request):
         results = Comment.objects.all()
         return render(request, "comments/index.html", {"results": results, "form":CommentForm})
+
+    
 
