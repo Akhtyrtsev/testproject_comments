@@ -12,12 +12,22 @@
     </table>
     <input type="submit" value="Send" >
 </form>
-<h2>Comments</h2>
-    <table>
-        {% for result in results %}
-        <tr><td>{{ result.user_name }}</td><td>
-	<tr><td>{{ result.text }}</td><td>
-        {% endfor %}
-    </table>
-</body>
+    <div class="content container">
+            <div class="row">
+                <div class="col-md-8">
+                {% for result in results %}
+                    <div class="result">
+			<table class="text">
+   			    <tr>
+    			        <td>{{ result.user_name }}</td>
+    			        <td class="rightcol">{{ result.published_date }}</td>
+   			    </tr>
+  			</table>  
+                        <p>{{ result.text|linebreaksbr }}</p>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

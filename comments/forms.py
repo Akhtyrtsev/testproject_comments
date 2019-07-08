@@ -1,19 +1,20 @@
 from django import forms
 from .models import Comment
-from .validators import validate_user_name
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['user_name', 'user_email', 'home_page', 'text']
 
-    """user_name = forms.CharField(label = 'Name', validators=[validate_user_name])
-    user_email = forms.EmailField(label = 'Email')
-    home_page = forms.URLField(label = 'Home page(unnecessary)', required = False)
-    text = forms.CharField(
-	label="Comment",
-	widget=forms.Textarea
-    )"""
+    captcha = forms.CharField(max_length=10)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        user_name = cleaned_data.get("user_name") 
+        text = cleaned_data.get("text")
+        if user_name.isalnum() == False:
+            raise forms.ValidationError('Uncorrect data', code='invalid')
+
     
     
 

@@ -20,10 +20,11 @@ class AddComment(View):
                 user_agent = parse(ua_string)
                 comment.user_browser = user_agent.browser.family + ' ' + user_agent.browser.version_string
                 comment.user_ip = request.META['REMOTE_ADDR']
+                comment.published_date = timezone.now()
                 comment.save()
             return HttpResponseRedirect('/comments/')
     def get(self, request):
-        results = Comment.objects.all()
+        results = Comment.objects.all()[::-1]
         return render(request, "comments/index.html", {"results": results, "form":CommentForm})
 
     
