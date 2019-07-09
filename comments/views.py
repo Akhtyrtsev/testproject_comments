@@ -15,16 +15,22 @@ class AddComment(View):
             form = CommentForm(request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
-                comment.parent_id = 1
+                comment.path = ''
                 ua_string = request.META['HTTP_USER_AGENT']
                 user_agent = parse(ua_string)
                 comment.user_browser = user_agent.browser.family + ' ' + user_agent.browser.version_string
                 comment.user_ip = request.META['REMOTE_ADDR']
                 comment.published_date = timezone.now()
                 comment.save()
+                try:
+                    comment.path += Comment.objects.get(id=form.cleaned_data['parent_comment']).path
+                    comment.path += '%(number)03d' % {'number':comment.id}
+                except:
+                    comment.path += '1%(number)03d' % {'number':comment.id}
+                comment.save()
             return HttpResponseRedirect('/comments/')
     def get(self, request):
-        results = Comment.objects.all()[::-1]
+        results = Comment.objects.order_by('path')
         return render(request, "comments/index.html", {"results": results, "form":CommentForm})
 
     
