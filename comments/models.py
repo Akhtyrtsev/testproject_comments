@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 class Comment(models.Model):
+    path = models.TextField()
     user_name = models.CharField(max_length=200)
     parent_id = models.IntegerField()
     user_email = models.EmailField(max_length=200)
