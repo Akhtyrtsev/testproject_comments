@@ -1,12 +1,12 @@
 from django import forms
 from .models import Comment
-
+from captcha.fields import CaptchaField
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['user_name', 'user_email', 'home_page', 'text']
 
-    captcha = forms.CharField(max_length=10)
+    captcha = CaptchaField()
     parent_comment = forms.IntegerField(
         widget=forms.HiddenInput,
         required=False
