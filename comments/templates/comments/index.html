@@ -25,11 +25,15 @@
 <body>
      <h1>Комментарии</h1>
      <form action="" method="get">
-	<p><input name="sort" type="radio" value="1">by name</p>
-        <p><input name="sort" type="radio" value="2">by name(reversed)</p>
-        <p><input name="sort" type="radio" value="3" checked>by pub_date</p>
-        <p><input name="sort" type="radio" value="4" checked>by pub_date(reversed)</p>
-        <input type="submit"value="Sort"/>
+        <p>Select type of sort </p>
+        <p><select name="sort">
+    	    <option disabled>Type of sort</option>
+            <option value="1">by name</option>
+            <option value="2">by name(reversed)</option>
+            <option value="3">by pub_date</option>
+            <option value="4">by pub_date(reversed)</option>
+        </select></p>
+        <p><input type="submit" value="sort"></p>
      </form>
     {% for result in results %}
         <a name="result-{{ result.id }}"></a>
