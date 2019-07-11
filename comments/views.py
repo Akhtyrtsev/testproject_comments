@@ -19,6 +19,9 @@ class AddComment(View):
     def byDate(comment):
         return comment.published_date
     def sortFunction(self, comments, value):
+	"""
+	Метод сортировки комментариев. Сначала отбираются и сортируются заглавные комментарии, а потом по их id к ним привязываются ответы.
+	"""
         new_comment = [comment for comment in comments if len(comment.path)==4]
         children_comment = [comment for comment in comments if len(comment.path)!=4]
         if value == '1':
