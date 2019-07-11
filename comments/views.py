@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 
 from user_agents import parse
 
+
 class AddComment(View):
     @staticmethod
     def byName(comment):
@@ -38,6 +39,7 @@ class AddComment(View):
                     result.append(child)
                     counter +=1
         return result
+    
     def post(self, request):
         if request.method == 'POST':
             form = CommentForm(request.POST) 
@@ -59,7 +61,8 @@ class AddComment(View):
             return self.get(request, form)
 
     def get(self, request, form=CommentForm()): 
-        print(form.errors)
+        if not form.errors:
+            form = CommentForm()
         result_list = Comment.objects.order_by('path')
         criterion = '4'
         if request.GET.get('sort'):
